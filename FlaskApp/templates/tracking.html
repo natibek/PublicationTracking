@@ -1,0 +1,72 @@
+{% include "template.html" %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-center align-items-center p-5">
+        <div class="d-flex justify-content-center align-items-center title">
+        
+            <h1 class="text-center">Publication Tracking </h1>
+            <a href="{{ url_for('info') }}" class="info"> <i class="bi bi-question-circle"></i> </a>
+    
+        </div>
+    </div>
+    
+
+
+    <div class="container p-3">
+        <div class="box">
+
+                <form action="/faculty_file" method="post" class="w-50" onchange="submitForm(event)" enctype="multipart/form-data">
+                    <label for="faculty_roaster" 
+                            class="btn d-flex justify-content-center align-items-center rounded-4 p-5"
+                            style="height: 150px; border-style: dashed; border-color: {{ 'green' if status[0] else 'red' }} ;">
+                        Upload Faculty Roaster
+                    </label>
+                    <input class="d-none" type="file" name="faculty_roaster" id="faculty_roaster" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                </form>
+            
+                <form action="/scopus_file" method="post" class="w-50" onchange="submitForm(event)" enctype="multipart/form-data">
+                    <label for="scopus" 
+                            class="btn d-flex justify-content-center align-items-center rounded-4 p-5"
+                            style="height: 150px; border-style: dashed; border-color: {{ 'green' if status[1] else 'red' }}">
+                        Upload Scopus CSV File
+                    </label>
+                    <input class="d-none" type="file" name="scopus" id="scopus" accept="application/csv, text/csv" required>
+                </form>
+
+
+                <form action="output_file" method="post" class="w-50" onchange="submitForm(event)" enctype="multipart/form-data">
+                    <label for="tracking_excel" 
+                             class=" btn d-flex justify-content-center align-items-center  rounded-4 p-5"
+                            style=" height: 150px; border-style: dashed; border-color: {{ 'green' if status[2] else 'red' }}">
+                        Upload Tracking Excel File
+                    </label>
+                    <input class="d-none" type="file" name="tracking_excel" id="tracking_excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                </form>
+
+        </div>
+    </div>
+    {% if all_valid %}
+        <div class="d-flex justify-content-center align-items-center p-5" >
+            <a class=" btn bg-info-subtle hover" href="{{ url_for('submit') }}" onclick="reload_page()">
+                Submit
+            </a>
+        </div>
+    {% endif %}
+
+
+
+    <script>
+        function submitForm(e) {
+            e.preventDefault();
+            e.target.form.submit();
+        }
+
+        function reload_page(){
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 1000);
+        }
+    </script>
+
+{% endblock content %}
