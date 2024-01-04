@@ -5,8 +5,7 @@ from openpyxl import load_workbook
 from datetime import datetime
 from openpyxl.styles import PatternFill
 from io import BytesIO
-
-app = Flask(__name__)
+from __init__ import app
 
 bsd_faculty_cleaned_df = None
 scopus_csv = None
