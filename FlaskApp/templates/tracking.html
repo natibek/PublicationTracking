@@ -47,12 +47,13 @@
         </div>
     </div>
     {% if all_valid and not completed %}
-        <div class="d-flex justify-content-center align-items-center p-5" >
-            <a class=" btn bg-info-subtle hover" href="{{ url_for('submit') }}">
+        <div class="d-flex justify-content-center align-items-center p-5" id = "submit_button" >
+            <a class=" btn bg-info-subtle hover" href="{{ url_for('submit') }}" onclick="handle_submit()">
                 Submit
             </a>
         </div>
-    {% elif all_valid and completed %}
+    
+    {% elif completed %}
         <div class="d-flex justify-content-center align-items-center p-5" >
             <a class=" btn bg-info-subtle hover" href="{{ url_for('download') }}" onclick="reload_page()">
                 Download
@@ -68,6 +69,11 @@
             e.target.form.submit();
         }
 
+        function handle_submit(e){
+            e.preventDefault();
+            document.getElementById("submit_button").style.display = "none";
+        }
+        
         function reload_page(){
             setTimeout(() => {
                 window.location.reload(true);
