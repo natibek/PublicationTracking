@@ -15,8 +15,8 @@
 
     <div class="container p-3">
         <div class="box">
-
-                <form action="/faculty_file" method="post" class="w-50" onchange="submitForm(event)" enctype="multipart/form-data">
+                
+                <form action="/faculty_file" method="post" onchange="submitForm(event)" enctype="multipart/form-data">
                     <label for="faculty_roaster" 
                             class="btn d-flex justify-content-center align-items-center rounded-4 p-5"
                             style="height: 150px; border-style: dashed; border-color: {{ 'green' if status[0] else 'red' }} ;">
@@ -25,7 +25,7 @@
                     <input class="d-none" type="file" name="faculty_roaster" id="faculty_roaster" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
                 </form>
             
-                <form action="/scopus_file" method="post" class="w-50" onchange="submitForm(event)" enctype="multipart/form-data">
+                <form class = "{{ 'd-none' if not status[0] }}" action="/scopus_file" method="post" onchange="submitForm(event)" enctype="multipart/form-data">
                     <label for="scopus" 
                             class="btn d-flex justify-content-center align-items-center rounded-4 p-5"
                             style="height: 150px; border-style: dashed; border-color: {{ 'green' if status[1] else 'red' }}">
@@ -35,7 +35,7 @@
                 </form>
 
 
-                <form action="output_file" method="post" class="w-50" onchange="submitForm(event)" enctype="multipart/form-data">
+                <form class = "{{ 'd-none' if not (status[0] and status[1]) }}" action="output_file" method="post" onchange="submitForm(event)" enctype="multipart/form-data">
                     <label for="tracking_excel" 
                              class=" btn d-flex justify-content-center align-items-center  rounded-4 p-5"
                             style=" height: 150px; border-style: dashed; border-color: {{ 'green' if status[2] else 'red' }}">
@@ -65,7 +65,7 @@
         function reload_page(){
             setTimeout(() => {
                 window.location.reload(true);
-            }, 1000);
+            }, 2000);
         }
     </script>
 

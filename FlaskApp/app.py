@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, send_file
+from flask import Flask, render_template, redirect, url_for, request, send_file, make_response
 import pandas as pd
 import numpy as np
 from openpyxl import load_workbook
@@ -329,16 +329,14 @@ def submit():
     modified_output.seek(0)
     download_file_name = "(" + str(datetime.now().month) + "_" + str(datetime.now().day) + "_" + str(datetime.now().year) + ") " + output_file_name 
 
-    send_file(
-        modified_output,
-        as_attachment=True,
-        download_name= download_file_name,
-        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-
     bsd_faculty_cleaned_df = scopus_csv =  output_excel = output_file_name = None
 
-    return redirect(url_for('publication_tracking'))
+    return send_file(
+            modified_output,
+            as_attachment=True,
+            download_name= download_file_name,
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
 
 @app.route("/info", methods = ["GET"])
 def info():
