@@ -14,6 +14,7 @@ scopus_csv = None
 output_excel = None
 output_file_name = None
 display_info = False
+completed = False
 
 def is_faculty(authors: list, authors_and_affiliations: list): # find info as well if true and make dictionary
     """
@@ -208,32 +209,37 @@ def create_faculty_df(faculty_roaster_excel):
 
 @app.route("/")
 def publication_tracking():
-    global bsd_faculty_cleaned_df, scopus_csv, output_excel
+    global bsd_faculty_cleaned_df, scopus_csv, output_excel, completed
     
     if bsd_faculty_cleaned_df is not None and scopus_csv is not None and output_excel is not None:
         all_valid = True
     else:
         all_valid = False
+        completed = False
+
 
     if bsd_faculty_cleaned_df is None:
         faculty_status = False
+        completed = False
     else:
         faculty_status = True
 
     if scopus_csv is None:
         scopus_status = False
+        completed = False
     else:
         scopus_status = True
 
     if output_excel is None:
         output_status = False
+        completed = False
     else:
         output_status = True
 
     if display_info:
         return render_template('info.html')
     else:
-        return render_template('tracking.html', all_valid = all_valid, status = [faculty_status, scopus_status, output_status])
+        return render_template('tracking.html', all_valid = all_valid, status = [faculty_status, scopus_status, output_status], completed = completed)
 
     
 @app.route("/faculty_file", methods = ["POST"])
@@ -323,13 +329,23 @@ def submit():
 
                 for cell in sheet[current_row_index]:
                     cell.fill = fill
-
+    global modified_output
     modified_output = BytesIO()
     workbook.save(modified_output)
     modified_output.seek(0)
-    download_file_name = "(" + str(datetime.now().month) + "_" + str(datetime.now().day) + "_" + str(datetime.now().year) + ") " + output_file_name 
+    
+    global completed
+    completed = True
 
+    return redirect(url_for('publication_tracking'))
+
+@app.route('/download')
+def download():
+    global bsd_faculty_cleaned_df, scopus_csv, output_excel, output_file_name, completed
+    
+    download_file_name = "(" + str(datetime.now().month) + "_" + str(datetime.now().day) + "_" + str(datetime.now().year) + ") " + output_file_name 
     bsd_faculty_cleaned_df = scopus_csv =  output_excel = output_file_name = None
+
 
     return send_file(
             modified_output,
@@ -344,7 +360,3 @@ def info():
     display_info = not display_info
     
     return redirect(url_for('publication_tracking'))
-
-
-# if __name__ == "__main__":
-#     app.run(debug=True)

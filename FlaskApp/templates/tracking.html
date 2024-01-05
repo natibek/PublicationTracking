@@ -46,10 +46,16 @@
 
         </div>
     </div>
-    {% if all_valid %}
+    {% if all_valid and not completed %}
         <div class="d-flex justify-content-center align-items-center p-5" >
-            <a class=" btn bg-info-subtle hover" href="{{ url_for('submit') }}" onclick="reload_page()">
+            <a class=" btn bg-info-subtle hover" href="{{ url_for('submit') }}">
                 Submit
+            </a>
+        </div>
+    {% elif all_valid and completed %}
+        <div class="d-flex justify-content-center align-items-center p-5" >
+            <a class=" btn bg-info-subtle hover" href="{{ url_for('download') }}" onclick="reload_page()">
+                Download
             </a>
         </div>
     {% endif %}
