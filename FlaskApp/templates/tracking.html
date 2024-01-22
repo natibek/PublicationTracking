@@ -70,10 +70,12 @@
         }
 
         function handle_submit(e){
-            e.preventDefault();
             document.getElementById("submit_button").style.display = "none";
+            setTimeout(() => {
+                
+            }, 5000);
         }
-        
+
         function reload_page(){
             setTimeout(() => {
                 window.location.reload(true);
