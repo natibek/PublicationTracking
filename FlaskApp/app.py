@@ -325,7 +325,7 @@ def submit():
 
             elif formatting == "Strange":
                 current_row_index = sheet.max_row
-                fill = PatternFill(start_color="00008000", end_color="00008000", fill_type="solid")
+                fill = PatternFill(start_color="00CCFFCC", end_color="00CCFFCC", fill_type="solid")
 
                 for cell in sheet[current_row_index]:
                     cell.fill = fill
