@@ -42,7 +42,10 @@ def is_faculty(authors: list, authors_and_affiliations: list): # find info as we
 
             index = np.where(last_name_found | preferred_last_name_found)
             
-            if (len(index[0]) > 1): ambiguous = True
+            try:
+                if (len(index[0]) > 1): ambiguous = True
+            except:
+                pass
     
             name = (bsd_faculty_cleaned_df.iloc[index[0][0]]['Name'])
             department = (bsd_faculty_cleaned_df.iloc[index[0][0]]['Department Name'])
