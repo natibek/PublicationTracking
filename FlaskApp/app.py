@@ -29,7 +29,7 @@ def is_faculty(authors: list, authors_and_affiliations: list): # find info as we
     departments = list(bsd_faculty_cleaned_df["Department Name"].unique()) # all the unique departments faculty can be part of
     
     author_info = {}
-
+    ambiguous = False
     for ind, author in enumerate(authors):
         is_found = (author.lower() in list(bsd_faculty_cleaned_df['Last Name First Initial'].str.lower()) or
                     author.lower() in list(bsd_faculty_cleaned_df['Previous Last Name First Initial'].str.lower()))     
@@ -42,6 +42,7 @@ def is_faculty(authors: list, authors_and_affiliations: list): # find info as we
 
             index = np.where(last_name_found | preferred_last_name_found)
             
+            if (len(index[0]) > 1): ambiguous = True
     
             name = (bsd_faculty_cleaned_df.iloc[index[0][0]]['Name'])
             department = (bsd_faculty_cleaned_df.iloc[index[0][0]]['Department Name'])
@@ -60,7 +61,7 @@ def is_faculty(authors: list, authors_and_affiliations: list): # find info as we
             except:
                 continue
 
-    return author_info
+    return author_info, ambiguous
 
 def department_authors(publication: pd.DataFrame):
     """
@@ -109,8 +110,8 @@ def department_authors(publication: pd.DataFrame):
         except:
             continue
 
-    department_authors_info = is_faculty(authors, authors_and_affiliations)
-    return (department_authors_info, all_authors, formatting)
+    department_authors_info, ambiguous = is_faculty(authors, authors_and_affiliations)
+    return (department_authors_info, all_authors, formatting, ambiguous)
 
 def get_corresponding_authors(publication: pd.DataFrame, department_authors_info: list, all_authors: list):
     '''
@@ -293,7 +294,7 @@ def submit():
     for publication in range(len(scopus_csv)):
         cur_publication = scopus_csv.iloc[publication]
         
-        department_authors_info, all_authors, formatting = department_authors(cur_publication)
+        department_authors_info, all_authors, formatting, ambiguous = department_authors(cur_publication)
 
         if len(department_authors_info) > 0:
             c_authors, c_authors_info, case = get_corresponding_authors(cur_publication, department_authors_info, all_authors)
@@ -309,22 +310,24 @@ def submit():
             
             output_data = [c_authors_names, c_departments, c_tracks, m_authors_names, m_departments, m_tracks, journal, title, date, link]
             sheet.append(output_data)
+            current_row_index = sheet.max_row
             
-            if formatting == "Strange" and case == "Strange":
-                current_row_index = sheet.max_row
+            if ambiguous:
+                fill = PatternFill(start_color="00CC99FF", end_color="00CC99FF", fill_type="solid")
+                for cell in sheet[current_row_index]:
+                    cell.fill = fill
+            elif formatting == "Strange" and case == "Strange":
                 fill = PatternFill(start_color="0000CCFF", end_color="0000CCFF", fill_type="solid")
 
                 for cell in sheet[current_row_index]:
                     cell.fill = fill
             elif case == "Strange":
-                current_row_index = sheet.max_row
                 fill = PatternFill(start_color="00FFFF99", end_color="00FFFF99", fill_type="solid")
 
                 for cell in sheet[current_row_index]:
                     cell.fill = fill
 
             elif formatting == "Strange":
-                current_row_index = sheet.max_row
                 fill = PatternFill(start_color="00CCFFCC", end_color="00CCFFCC", fill_type="solid")
 
                 for cell in sheet[current_row_index]:
