@@ -20,16 +20,19 @@
                 the updated tracking file whose file name will be editted so that the date in a (month_day_year) format.  
             </p>
             <p>
-                The rows for publications with no <em>correspondence address</em> are filled with yellow and the last author in 
+                The rows for publications with no <em>correspondence address</em> are filled with <span style="color: #FFFF99;">yellow</span> and the last author in 
                 author list is used as the corresponding author. 
             </p>
             <p>
                 In cases where the <em>Authors with affiliation</em>
                 column form Scopus has formating other than not last-name, first-initial, affiliation; ... 
-                resulting in a different number of authors parsed from this column than in the <em>Authors</em> column, the row is filled with green.
+                resulting in a different number of authors parsed from this column than in the <em>Authors</em> column, the row is filled with <span style="color: #CCFFCC;">green</span>.
+            </p>
+            <p>
+                If the Authors name is ambiguous (ie there are multiple matches in the Faculty Roaster), the row is filled with <span style="color: #CC99FF;">purple</span>
             </p>
             <p> 
-                If both strange cases are true, the row is filled with blue.
+                If both strange cases are true, the row is filled with <span style="color: #00CCFF;">blue</span>.
             </p>
         </div>
 
